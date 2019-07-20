@@ -7,8 +7,11 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/url"
+	"strconv"
 	"strings"
 
+	"github.com/otofune/wetsuit/entity"
 	"github.com/pkg/errors"
 )
 
@@ -145,4 +148,43 @@ func (c *Client) CreatePost(text string) (int, error) {
 		return 0, err
 	}
 	return response.ID, nil
+}
+
+type ValueOption func(c *url.Values)
+
+func Limit(l int) ValueOption {
+	return func(q *url.Values) {
+		q.Set("limit", strconv.Itoa(l))
+	}
+}
+func SinceID(sid int) ValueOption {
+	return func(q *url.Values) {
+		q.Set("sinceId", strconv.Itoa(sid))
+	}
+}
+func MaxID(mid int) ValueOption {
+	return func(q *url.Values) {
+		q.Set("maxId", strconv.Itoa(mid))
+	}
+}
+
+func (c *Client) GetTimeline(key string, options ...ValueOption) (*[]Post, error) {
+	q := url.Values{}
+	for _, o := range options {
+		o(&q)
+	}
+	qs := q.Encode()
+	if len(qs) != 0 {
+		qs = "?" + qs
+	}
+
+	bytes, err := c.Get("/v1/timelines/" + key + qs)
+	if err != nil {
+		return nil, err
+	}
+	response := []entity.Post{}
+	if err := json.Unmarshal(bytes, &response); err != nil {
+		return nil, err
+	}
+	return &response, nil
 }
