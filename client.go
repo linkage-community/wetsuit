@@ -168,7 +168,7 @@ func MaxID(mid int) ValueOption {
 	}
 }
 
-func (c *Client) GetTimeline(key string, options ...ValueOption) (*[]Post, error) {
+func (c *Client) GetTimeline(key string, options ...ValueOption) (*[]entity.Post, error) {
 	q := url.Values{}
 	for _, o := range options {
 		o(&q)
