@@ -154,7 +154,7 @@ type ValueOption func(c *url.Values)
 
 func Limit(l int) ValueOption {
 	return func(q *url.Values) {
-		q.Set("limit", strconv.Itoa(l))
+		q.Set("count", strconv.Itoa(l))
 	}
 }
 func SinceID(sid int) ValueOption {

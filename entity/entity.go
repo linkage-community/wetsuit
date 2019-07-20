@@ -15,6 +15,9 @@ type AlbumFile struct {
 	Variants []AlbumFileVariant
 }
 type Application struct {
+	ID          int
+	Name        string
+	IsAutomated bool
 }
 type User struct {
 	ID         int
