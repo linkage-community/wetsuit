@@ -1,4 +1,4 @@
-module github.com/otofune/wetsuit
+module github.com/linkage-community/wetsuit
 
 go 1.12
 
